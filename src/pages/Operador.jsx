@@ -1,62 +1,137 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import MapaOperador from '../mapa/MapaOperador.jsx'
-import { BARRIOS } from '../data/barrios.js'
+import BarraOperador from '../components/operador/BarraOperador.jsx'
+import FiltrosReportes from '../components/operador/FiltrosReportes.jsx'
+import ListaReportes from '../components/operador/ListaReportes.jsx'
+import DetalleReporte from '../components/operador/DetalleReporte.jsx'
+import { useReportes } from '../estado/ReportesContext.jsx'
+import { estaTerminado } from '../estado/estados.js'
+import { grupoPorCodigo } from '../data/grupos.js'
+import { useTitulo } from '../hooks/useTitulo.js'
+import './Operador.css'
 
-// Reportes de PRUEBA para ver el mapa funcionando.
-// TODO (estudiantes): reemplazarlos por los reportes del estado global
-// (los que envía el ciudadano desde /reportar).
-const REPORTES_DEMO = [
-  { id: 1, grupo: 100, barrio: 'San Antonio', estado: 'Recibido' },
-  { id: 2, grupo: 300, barrio: 'Siloé', estado: 'Recibido' },
-  { id: 3, grupo: 400, barrio: 'Valle del Lili', estado: 'Unidad despachada' },
-  { id: 4, grupo: 800, barrio: 'Floralia', estado: 'Recibido' },
-  { id: 5, grupo: 300, barrio: 'El Poblado', estado: 'Validado' },
-  { id: 6, grupo: 100, barrio: 'Chipichape', estado: 'Recibido' },
-  { id: 7, grupo: 500, barrio: 'Ciudad Jardín', estado: 'Cerrado' },
-  { id: 8, grupo: 200, barrio: 'Junín', estado: 'Recibido' },
-  { id: 9, grupo: 900, barrio: 'Meléndez', estado: 'Recibido' },
-].map((r) => {
-  const b = BARRIOS.find((x) => x.nombre === r.barrio)
-  return { ...r, lat: b.lat, lng: b.lng }
-})
-
+// Pantalla 3 (/operador): mapa real con los reportes del estado global, lista, detalle,
+// validación y despacho. Ya no usa los reportes de prueba del código base.
 export default function Operador() {
+  useTitulo('Tablero del radio operador')
+  const { reportes } = useReportes()
   const [seleccionadoId, setSeleccionadoId] = useState(null)
-  const seleccionado = REPORTES_DEMO.find((r) => r.id === seleccionadoId)
+  const [filtros, setFiltros] = useState({ estado: 'todos', grupos: [] })
+  const [agrupar, setAgrupar] = useState(true)
+  const aviso = useAvisoDeNuevos(reportes)
+  const detalleRef = useRef(null)
+
+  const visibles = useMemo(() => filtrarYOrdenar(reportes, filtros), [reportes, filtros])
+  const seleccionado = reportes.find((r) => r.id === seleccionadoId) ?? null
+  // En el mapa siempre se ve el seleccionado, aunque los filtros lo saquen de la lista
+  const enMapa = seleccionado && !visibles.includes(seleccionado) ? [...visibles, seleccionado] : visibles
+
+  function seleccionar(id) {
+    setSeleccionadoId(id)
+    // En celular el detalle queda debajo del mapa: bajar hasta él
+    if (window.matchMedia('(max-width: 760px)').matches) {
+      requestAnimationFrame(() => detalleRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
+    }
+  }
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', height: '100vh' }}>
-      <MapaOperador
-        reportes={REPORTES_DEMO}
-        seleccionadoId={seleccionadoId}
-        onSeleccionar={setSeleccionadoId}
+    <div className={`operador${seleccionado ? ' operador--con-detalle' : ''}`}>
+      <BarraOperador
+        filtroEstado={filtros.estado}
+        onFiltrarEstado={(estado) => setFiltros((f) => ({ ...f, estado }))}
       />
-      <aside style={{ padding: 16, background: '#0f172a', color: '#e2e8f0', overflowY: 'auto', borderLeft: '1px solid #1e293b' }}>
-        <h2>Radio operador</h2>
-        {/* Lista mínima de ejemplo: al hacer clic, el mapa vuela al reporte.
-            TODO (estudiantes): lista completa, detalle, llamar/validar y despacho. */}
-        <ul style={{ listStyle: 'none', padding: 0 }}>
-          {REPORTES_DEMO.map((r) => (
-            <li key={r.id}>
-              <button
-                onClick={() => setSeleccionadoId(r.id)}
-                style={{
-                  width: '100%', textAlign: 'left', margin: '4px 0', padding: '8px 10px', borderRadius: 8,
-                  border: '1px solid #334155', cursor: 'pointer', color: '#e2e8f0',
-                  background: r.id === seleccionadoId ? '#1e3a5f' : '#111827',
-                }}
-              >
-                #{r.id} · {r.grupo} · {r.barrio}
-                <br />
-                <small style={{ color: '#94a3b8' }}>{r.estado}</small>
-              </button>
-            </li>
-          ))}
-        </ul>
-        {seleccionado && <p>Seleccionado: reporte #{seleccionado.id}</p>}
-        <Link to="/" style={{ color: '#7dd3fc' }}>Volver a la landing</Link>
-      </aside>
+
+      <div className="operador__cuerpo">
+        <aside className="operador__lista" aria-label="Lista de reportes">
+          <FiltrosReportes
+            filtros={filtros}
+            onCambiar={setFiltros}
+            agrupar={agrupar}
+            onAgrupar={setAgrupar}
+            total={reportes.length}
+            visibles={visibles.length}
+          />
+          <ListaReportes
+            reportes={visibles}
+            seleccionadoId={seleccionadoId}
+            onSeleccionar={seleccionar}
+            hayReportes={reportes.length > 0}
+          />
+        </aside>
+
+        <section className="operador__mapa" aria-label="Mapa de reportes">
+          <MapaOperador
+            reportes={enMapa}
+            seleccionadoId={seleccionadoId}
+            onSeleccionar={seleccionar}
+            agrupar={agrupar}
+          />
+        </section>
+
+        <aside className="operador__detalle" ref={detalleRef} aria-label="Detalle del reporte">
+          {seleccionado ? (
+            // key: al cambiar de reporte, el detalle arranca de cero (unidad sugerida, grupo, etc.)
+            <DetalleReporte
+              key={seleccionado.id}
+              reporte={seleccionado}
+              onCerrar={() => setSeleccionadoId(null)}
+              onSeleccionar={seleccionar}
+            />
+          ) : (
+            <div className="detalle-vacio">
+              <p>
+                <strong>Selecciona un reporte</strong>
+              </p>
+              <p>En la lista o en el mapa. Aquí verás sus datos, las fotos y los pasos para validarlo y despacharlo.</p>
+            </div>
+          )}
+        </aside>
+      </div>
+
+      {aviso && (
+        <div className="aviso-flotante" role="status">
+          {aviso}
+        </div>
+      )}
     </div>
   )
+}
+
+function filtrarYOrdenar(reportes, { estado, grupos }) {
+  return reportes
+    .filter((r) => grupos.length === 0 || grupos.includes(r.grupo))
+    .filter((r) => {
+      if (estado === 'todos') return true
+      if (estado === 'activos') return !estaTerminado(r.estado)
+      return r.estado === estado
+    })
+    .sort((a, b) => b.creadoEn.localeCompare(a.creadoEn)) // los más recientes primero
+}
+
+// Muestra un aviso de unos segundos cuando llegan reportes nuevos (desde otra pestaña o la simulación)
+function useAvisoDeNuevos(reportes) {
+  const conocidos = useRef(null)
+  const [aviso, setAviso] = useState(null)
+
+  useEffect(() => {
+    const ids = new Set(reportes.map((r) => r.id))
+    if (conocidos.current) {
+      const nuevos = reportes.filter((r) => !conocidos.current.has(r.id))
+      if (nuevos.length === 1) {
+        const r = nuevos[0]
+        setAviso(`Nuevo reporte ${r.id}: ${grupoPorCodigo(r.grupo)?.nombre} en ${r.barrio}`)
+      } else if (nuevos.length > 1) {
+        setAviso(`Llegaron ${nuevos.length} reportes nuevos`)
+      }
+    }
+    conocidos.current = ids
+  }, [reportes])
+
+  useEffect(() => {
+    if (!aviso) return
+    const temporizador = setTimeout(() => setAviso(null), 5000)
+    return () => clearTimeout(temporizador)
+  }, [aviso])
+
+  return aviso
 }
