@@ -1,36 +1,52 @@
-import { Canvas, useFrame } from '@react-three/fiber'
-import { OrbitControls } from '@react-three/drei'
-import { useRef } from 'react'
+import { useState } from 'react'
+import { Canvas } from '@react-three/fiber'
+import CamionBomberos from './CamionBomberos.jsx'
+import Carretera from './Carretera.jsx'
+import PinesGrupos from './PinesGrupos.jsx'
+import CamaraParallax from './CamaraParallax.jsx'
+import { useMenosMovimiento } from '../hooks/useMenosMovimiento.js'
 
-// Escena 3D de la landing con React Three Fiber.
-// Esto es solo un punto de partida (una "sirena" que gira) para comprobar que R3F funciona.
-// TODO (estudiantes): reemplazarla por su propia escena (sección 5 del enunciado).
-function Sirena() {
-  const ref = useRef()
-  useFrame((_, delta) => {
-    ref.current.rotation.y += delta * 2
-  })
-  return (
-    <group ref={ref}>
-      <mesh position={[0, 0.5, 0]}>
-        <cylinderGeometry args={[0.5, 0.6, 1, 32]} />
-        <meshStandardMaterial color="#dc2626" emissive="#dc2626" emissiveIntensity={0.4} />
-      </mesh>
-      <mesh position={[0, -0.15, 0]}>
-        <cylinderGeometry args={[0.8, 0.8, 0.3, 32]} />
-        <meshStandardMaterial color="#334155" />
-      </mesh>
-    </group>
-  )
-}
+// Escena 3D de la landing (React Three Fiber): un camión de bomberos hecho con geometrías
+// básicas, sobre una vía, rodeado por los 7 grupos de emergencia como pines del mapa.
+//   - Mouse encima del camión: se encienden las luces de la sirena.
+//   - Clic en el camión: sale a la emergencia (sube la escalera, giran las ruedas, se mueve la vía).
+//   - Mouse encima de un pin: muestra el grupo. Clic: abre el reporte con ese grupo ya elegido.
+//   - La cámara sigue un poco al mouse (efecto de profundidad).
+export default function EscenaLanding({ onElegirGrupo }) {
+  const [enServicio, setEnServicio] = useState(false)
+  const reducido = useMenosMovimiento()
 
-export default function EscenaLanding() {
   return (
-    <Canvas camera={{ position: [0, 1.5, 3.5], fov: 45 }} style={{ height: 320 }}>
-      <ambientLight intensity={0.6} />
-      <directionalLight position={[3, 4, 2]} intensity={1.2} />
-      <Sirena />
-      <OrbitControls enableZoom={false} />
-    </Canvas>
+    <div className="escena">
+      <div
+        className="escena__lienzo"
+        role="img"
+        aria-label="Camión de bomberos en 3D rodeado por los siete grupos de emergencia"
+      >
+        <Canvas shadows dpr={[1, 2]} camera={{ position: [5, 2.8, 5.9], fov: 38 }}>
+          <color attach="background" args={['#0f172a']} />
+          <fog attach="fog" args={['#0f172a', 11, 24]} />
+
+          {/* Luces: ambiente suave, cielo/suelo y un "sol" que proyecta sombras */}
+          <ambientLight intensity={0.55} />
+          <hemisphereLight args={['#dbeafe', '#0f172a', 0.7]} />
+          <directionalLight position={[5, 8, 6]} intensity={2.2} castShadow shadow-mapSize={[1024, 1024]} />
+
+          <CamionBomberos
+            enServicio={enServicio}
+            onAlternar={() => setEnServicio((valor) => !valor)}
+            reducido={reducido}
+          />
+          <Carretera enMovimiento={enServicio && !reducido} />
+          <PinesGrupos onElegir={onElegirGrupo} reducido={reducido} />
+          <CamaraParallax activa={!reducido} />
+        </Canvas>
+      </div>
+      <p className="escena__pista" aria-live="polite">
+        {enServicio
+          ? '¡En camino! Haz clic en el camión para detenerlo.'
+          : 'Pasa el mouse por el camión y haz clic para salir a la emergencia. Toca un pin para reportar.'}
+      </p>
+    </div>
   )
 }
