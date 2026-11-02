@@ -7,7 +7,8 @@ reporte en su pantalla.
 
 Parcial final · Desarrollo Web 2026-2 · Universidad de San Buenaventura Cali.
 
-**Sitio desplegado:** _pendiente_
+- **Sitio desplegado:** https://linea-119.vercel.app
+- **Repositorio:** https://github.com/jsav2003/linea-119
 
 ## Integrantes
 
