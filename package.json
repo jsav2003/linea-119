@@ -1,12 +1,13 @@
 {
-  "name": "parcial-119-base",
+  "name": "linea-119",
   "private": true,
   "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "node --test"
   },
   "dependencies": {
     "@react-three/drei": "9.114.0",
