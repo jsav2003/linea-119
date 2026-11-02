@@ -1,3 +1,7 @@
+/* El mapa queda en su propia capa: así los paneles de Leaflet (z-index 400+)
+   no tapan el encabezado fijo ni los avisos flotantes. */
+.leaflet-container { z-index: 0; }
+
 /* Pin con forma de gota, del color del grupo (variable --color) */
 .pin {
   position: relative;
@@ -14,12 +18,8 @@
   border-radius: 50%;
   background: #fff;
 }
-.pin--seleccionado {
-  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.6), 0 0 18px var(--color);
-}
 
-/* Animación de pulso YA ESCRITA.
-   TODO (estudiantes): aplicar la clase "pin--pulso" a los reportes en estado Recibido. */
+/* Recibido: animación de pulso (venía escrita en el código base) */
 .pin--pulso::before {
   content: '';
   position: absolute;
@@ -33,17 +33,74 @@
   to { transform: scale(1.6); opacity: 0; }
 }
 
-/* TODO (estudiantes): crear una clase "pin--apagado" (gris, opacidad baja)
-   para los reportes Cerrado o Descartado. */
+/* Validado: borde doble, ya lo revisó un operador */
+.pin--validado { box-shadow: 0 0 0 2px var(--color), 0 2px 6px rgba(0, 0, 0, 0.45); }
+
+/* Unidad despachada: el centro se oscurece (va una unidad en camino) */
+.pin--despachado::after { background: #0f172a; box-shadow: 0 0 0 2px #fff; }
+
+/* Cerrado o Descartado: gris y con opacidad baja */
+.pin--apagado { background: #9ca3af; opacity: 0.45; box-shadow: none; }
+.pin--apagado::after { background: #e5e7eb; }
+
+/* Seleccionado (va al final para ganarle a los estados) */
+.pin.pin--seleccionado { opacity: 1; box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.6), 0 0 18px var(--color); }
+
+/* Círculo que agrupa reportes cercanos: anillo con los colores de sus grupos y el total */
+.cumulo { position: relative; display: grid; place-items: center; border-radius: 50%; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.45); cursor: pointer; }
+.cumulo span {
+  display: grid;
+  place-items: center;
+  width: 68%;
+  height: 68%;
+  border-radius: 50%;
+  background: #0f172a;
+  color: #fff;
+  font: 700 13px system-ui, sans-serif;
+}
+.cumulo--pendientes::before {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border: 3px solid #f59e0b;
+  border-radius: 50%;
+  animation: pulso 1.6s ease-out infinite;
+}
+
+/* Popup del pin: nombre, qué ve y estado */
+.popup-reporte { min-width: 220px; max-width: 260px; color: #1c1917; font: 13px/1.4 system-ui, sans-serif; }
+.leaflet-popup-content .popup-reporte p { margin: 0 0 6px; }
+.popup-reporte__grupo { padding-left: 8px; border-left: 4px solid var(--color); font-weight: 600; }
+.popup-reporte__nombre { font-size: 14px; font-weight: 700; }
+.popup-reporte__que-ve { color: #44403c; font-style: italic; }
+.leaflet-popup-content .popup-reporte__pie { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0; color: #57534e; }
+
+/* Lista de reportes de un círculo que ya no se separa con zoom */
+.lista-circulo { min-width: 230px; font: 13px system-ui, sans-serif; }
+.leaflet-popup-content .lista-circulo__titulo { margin: 0 0 6px; font-weight: 700; }
+.lista-circulo ul { max-height: 220px; margin: 0; padding: 0; overflow-y: auto; list-style: none; }
+.lista-circulo button { display: flex; align-items: center; gap: 8px; width: 100%; padding: 6px; border: 0; border-radius: 6px; background: none; text-align: left; cursor: pointer; }
+.lista-circulo button:hover { background: #f5f5f4; }
 
 /* Leyenda y controles sobre el mapa */
 .leyenda {
-  background: rgba(15, 23, 42, 0.9);
-  color: #e2e8f0;
+  min-width: 230px;
   padding: 10px 12px;
   border-radius: 10px;
+  background: rgba(15, 23, 42, 0.92);
+  color: #e2e8f0;
   font: 12px system-ui, sans-serif;
-  min-width: 220px;
 }
+.leyenda__titulo { font-weight: 700; cursor: pointer; }
+.leyenda[open] .leyenda__titulo { margin-bottom: 6px; }
 .leyenda__fila { display: flex; align-items: center; gap: 8px; margin: 3px 0; }
-.leyenda__punto { width: 10px; height: 10px; border-radius: 50%; }
+.leyenda__punto { flex: none; width: 10px; height: 10px; border-radius: 50%; }
+.leyenda__codigo { width: 28px; color: #94a3b8; }
+.leyenda__nombre { flex: 1; }
+.leyenda__estados { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 10px; margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(148, 163, 184, 0.25); }
+.leyenda__estados span { display: flex; align-items: center; gap: 8px; }
+.pin--muestra { --color: #64748b; display: inline-block; flex: none; width: 13px; height: 13px; margin: 2px 2px 4px; border-width: 2px; }
+.pin--muestra.pin--pulso::before { inset: -5px; border-width: 2px; }
+
+/* Mini mapa de /reportar */
+.mini-mapa { width: 100%; height: 280px; border: 1.5px solid #d6d3d1; border-radius: 12px; }
