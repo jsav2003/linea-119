@@ -1,0 +1,116 @@
+/* ===== Landing (/) ===== */
+.hero {
+  padding: 40px 0 56px;
+  background:
+    radial-gradient(1100px 520px at 85% 15%, rgb(220 38 38 / 0.28), transparent 60%),
+    linear-gradient(180deg, #0b1120, #111827);
+  color: #f8fafc;
+}
+.hero__grid { display: grid; grid-template-columns: 1fr 1.05fr; align-items: center; gap: 40px; }
+.hero__antetitulo {
+  margin-bottom: 12px;
+  color: #fca5a5;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.hero h1 { margin-bottom: 16px; font-size: clamp(2.3rem, 5vw, 3.7rem); letter-spacing: -0.025em; }
+.hero__lead { max-width: 34em; color: #cbd5e1; font-size: 1.15rem; }
+.hero__acciones { display: flex; flex-wrap: wrap; gap: 12px; margin: 26px 0 14px; }
+.hero__nota { margin: 0; color: #94a3b8; font-size: 0.9rem; }
+.hero__escena { min-width: 0; }
+
+/* Escena 3D */
+.escena {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 0.1);
+  border-radius: 22px;
+  background: #0f172a;
+  box-shadow: 0 30px 80px rgb(0 0 0 / 0.45);
+}
+.escena__lienzo { height: 400px; }
+.escena__pista {
+  position: absolute;
+  right: 12px;
+  bottom: 10px;
+  left: 12px;
+  margin: 0;
+  color: #cbd5e1;
+  font-size: 0.85rem;
+  text-align: center;
+  text-shadow: 0 1px 3px #000;
+  pointer-events: none;
+}
+.escena-respaldo {
+  display: grid;
+  place-items: center;
+  height: 400px;
+  padding: 16px;
+  border: 1px dashed rgb(255 255 255 / 0.15);
+  border-radius: 22px;
+  color: #94a3b8;
+  text-align: center;
+}
+
+/* Etiqueta HTML sobre un pin 3D (drei <Html>) */
+.etiqueta-3d {
+  display: grid;
+  min-width: 170px;
+  padding: 8px 12px;
+  border-left: 5px solid var(--color);
+  border-radius: 10px;
+  background: #fff;
+  color: #1c1917;
+  font: 13px/1.3 system-ui, sans-serif;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.35);
+  pointer-events: none;
+}
+.etiqueta-3d small { color: #57534e; }
+
+/* Secciones */
+.seccion { padding: 56px 0 8px; }
+.seccion h2 { font-size: clamp(1.5rem, 3vw, 2rem); }
+.seccion__intro { max-width: 46em; color: var(--tinta-2); }
+
+.pasos-landing { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 20px 0 0; padding: 0; list-style: none; }
+.pasos-landing li { padding: 22px; border: 1px solid var(--borde); border-radius: var(--radio); background: var(--superficie); box-shadow: var(--sombra); }
+.pasos-landing h3 { margin-bottom: 6px; font-size: 1.15rem; }
+.pasos-landing p { margin: 0; color: var(--tinta-2); }
+.pasos-landing__numero {
+  display: inline-grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  margin-bottom: 12px;
+  border-radius: 50%;
+  background: var(--rojo-suave);
+  color: var(--rojo);
+  font-weight: 800;
+}
+
+.grupos-landing { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; margin: 20px 0 0; padding: 0; list-style: none; }
+
+/* Pie de página con el acceso del radio operador */
+.pie { margin-top: 64px; padding: 28px 0; background: #0b1120; color: #cbd5e1; }
+.pie__fila { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 20px; }
+.pie p { max-width: 52em; margin: 0; font-size: 0.9rem; }
+
+@media (max-width: 900px) {
+  .hero { padding: 22px 0 36px; }
+  .hero__grid { grid-template-columns: 1fr; gap: 24px; }
+  .hero__lead { font-size: 1.05rem; }
+  .hero__acciones { margin-top: 20px; }
+  .escena__lienzo,
+  .escena-respaldo { height: 320px; }
+  .pasos-landing { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 480px) {
+  .hero__acciones .boton { width: 100%; }
+  .encabezado .marca__texto span { display: none; }
+  .escena__lienzo,
+  .escena-respaldo { height: 280px; }
+  .escena__pista { font-size: 0.78rem; }
+}
