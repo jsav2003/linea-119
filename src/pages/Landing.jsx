@@ -22,83 +22,141 @@ export default function Landing() {
 
   return (
     <div className="landing">
-      <Encabezado oscuro />
+      <Encabezado />
 
       <main>
-        <section className="hero">
-          <div className="contenedor hero__grid">
-            <div className="hero__texto">
-              <p className="hero__antetitulo">Canal digital de la línea 119</p>
-              <h1>¿Tienes una emergencia?</h1>
-              <p className="hero__lead">
-                Repórtala aquí con la ubicación y fotos. El radio operador de Bomberos Cali la ve al instante en su
-                mapa y tú sigues el estado de tu reporte.
-              </p>
-              <div className="hero__acciones">
-                <Link to="/reportar" className="boton boton--primario boton--grande">
-                  Reportar emergencia
-                </Link>
-                <a href="tel:119" className="boton boton--claro boton--grande">
-                  Llamar al 119
-                </a>
-              </div>
-              <p className="hero__nota">Si hay personas en peligro inmediato, llama: el reporte web no reemplaza la llamada.</p>
-            </div>
+        <section className="hero" aria-labelledby="titulo-hero">
+          <div className="contenedor contenedor--ancho">
+            <p className="rotulo hero__antetitulo">Canal digital de la línea 119 · Bomberos Cali</p>
+            {/* Cada línea del titular está dentro de una máscara: al cargar sube desde abajo */}
+            <h1 id="titulo-hero" className="hero__titulo">
+              <span className="hero__linea">
+                <span>¿Tienes una</span>
+              </span>{' '}
+              <span className="hero__linea">
+                <span>emergencia?</span>
+              </span>
+            </h1>
 
-            <div className="hero__escena">
-              <ErrorBoundary fallback={<div className="escena-respaldo">🚒 Tu navegador no pudo mostrar la escena 3D.</div>}>
-                <Suspense fallback={<div className="escena-respaldo">Cargando escena 3D…</div>}>
-                  <EscenaLanding onElegirGrupo={(codigo) => navigate(`/reportar?grupo=${codigo}`)} />
-                </Suspense>
-              </ErrorBoundary>
+            <div className="hero__grid">
+              <div className="hero__texto">
+                <p className="hero__lead">
+                  Repórtala aquí con la ubicación y fotos. El radio operador de Bomberos Cali la ve al instante en su
+                  mapa y tú sigues el estado de tu reporte.
+                </p>
+                <div className="hero__acciones">
+                  <Link to="/reportar" className="boton boton--primario boton--grande">
+                    Reportar emergencia
+                  </Link>
+                  <a href="tel:119" className="boton boton--grande">
+                    Llamar al 119
+                  </a>
+                </div>
+                <p className="hero__nota">
+                  Si hay personas en peligro inmediato, llama: el reporte web no reemplaza la llamada.
+                </p>
+              </div>
+
+              <div className="hero__escena">
+                <div className="hero__escena-entrada">
+                  <ErrorBoundary fallback={<div className="escena-respaldo">🚒 Tu navegador no pudo mostrar la escena 3D.</div>}>
+                    <Suspense fallback={<div className="escena-respaldo">Cargando escena 3D…</div>}>
+                      <EscenaLanding onElegirGrupo={(codigo) => navigate(`/reportar?grupo=${codigo}`)} />
+                    </Suspense>
+                  </ErrorBoundary>
+                </div>
+              </div>
             </div>
           </div>
         </section>
 
-        <section className="seccion contenedor" aria-labelledby="titulo-como-funciona">
-          <h2 id="titulo-como-funciona">Cómo funciona</h2>
-          <ol className="pasos-landing">
-            {PASOS.map((paso, i) => (
-              <li key={paso.titulo}>
-                <span className="pasos-landing__numero">{i + 1}</span>
-                <h3>{paso.titulo}</h3>
-                <p>{paso.texto}</p>
-              </li>
-            ))}
-          </ol>
+        <BarraTexto />
+
+        <section id="como-funciona" className="seccion" aria-labelledby="titulo-como-funciona">
+          <div className="contenedor contenedor--ancho">
+            <div className="seccion__cabeza">
+              <p className="rotulo seccion__indice" aria-hidden="true">
+                (01)
+              </p>
+              <h2 id="titulo-como-funciona">Cómo funciona</h2>
+            </div>
+            <ol className="pasos-landing">
+              {PASOS.map((paso, i) => (
+                <li key={paso.titulo}>
+                  <span className="pasos-landing__numero" aria-hidden="true">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <h3>{paso.titulo}</h3>
+                  <p>{paso.texto}</p>
+                </li>
+              ))}
+            </ol>
+          </div>
         </section>
 
-        <section className="seccion contenedor" aria-labelledby="titulo-grupos">
-          <h2 id="titulo-grupos">Grupos de emergencia</h2>
-          <p className="seccion__intro">
-            Son los códigos del protocolo de despacho de Bomberos Cali. Toca uno para reportar una emergencia de ese
-            tipo.
-          </p>
-          <ul className="grupos-landing">
-            {GRUPOS.map((g) => (
-              <li key={g.codigo}>
-                <Link to={`/reportar?grupo=${g.codigo}`} className="tarjeta-grupo" style={{ '--color': g.color }}>
-                  <span className="tarjeta-grupo__codigo">{g.codigo}</span>
-                  <span className="tarjeta-grupo__nombre">{g.nombre}</span>
-                  <span className="tarjeta-grupo__ejemplos">{g.ejemplos}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
+        <section className="seccion" aria-labelledby="titulo-grupos">
+          <div className="contenedor contenedor--ancho">
+            <div className="seccion__cabeza">
+              <p className="rotulo seccion__indice" aria-hidden="true">
+                (02)
+              </p>
+              <h2 id="titulo-grupos">Grupos de emergencia</h2>
+              <p className="seccion__intro">
+                Son los códigos del protocolo de despacho de Bomberos Cali. Toca uno para reportar una emergencia de
+                ese tipo.
+              </p>
+            </div>
+            <ul className="grupos-landing">
+              {GRUPOS.map((g) => (
+                <li key={g.codigo}>
+                  <Link to={`/reportar?grupo=${g.codigo}`} className="tarjeta-grupo" style={{ '--color': g.color }}>
+                    <span className="tarjeta-grupo__codigo">{g.codigo}</span>
+                    <span className="tarjeta-grupo__nombre">{g.nombre}</span>
+                    <span className="tarjeta-grupo__ejemplos">{g.ejemplos}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
         </section>
       </main>
 
       <footer className="pie">
-        <div className="contenedor pie__fila">
-          <p>
-            Prototipo académico · Desarrollo Web 2026-2 · Universidad de San Buenaventura Cali. No es un canal
-            oficial: en una emergencia real, llama al 119.
+        <div className="contenedor contenedor--ancho">
+          <p className="pie__marca" aria-hidden="true">
+            Línea 119
           </p>
-          <Link to="/operador" className="boton boton--claro pie__operador">
-            Acceso radio operador
-          </Link>
+          <div className="pie__fila">
+            <p>
+              Prototipo académico · Desarrollo Web 2026-2 · Universidad de San Buenaventura Cali. No es un canal
+              oficial: en una emergencia real, llama al 119.
+            </p>
+            <Link to="/operador" className="boton boton--claro pie__operador">
+              Acceso radio operador
+            </Link>
+          </div>
         </div>
       </footer>
+    </div>
+  )
+}
+
+// Barra de texto en mayúsculas bajo el hero, con líneas finas arriba y abajo
+function BarraTexto() {
+  return (
+    <div className="barra-texto">
+      <div className="contenedor contenedor--ancho barra-texto__fila">
+        <span className="barra-texto__izq">Línea 119 · Bomberos Cali</span>
+        <a href="#como-funciona" className="barra-texto__bajar">
+          <span>Baja para ver cómo funciona</span>
+          <span className="flecha-circular" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 14 14">
+              <path d="M7 1v11M2.5 7.5 7 12l4.5-4.5" fill="none" stroke="currentColor" strokeWidth="1.8" />
+            </svg>
+          </span>
+        </a>
+        <span className="barra-texto__der">24 horas</span>
+      </div>
     </div>
   )
 }

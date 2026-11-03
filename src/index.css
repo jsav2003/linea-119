@@ -83,7 +83,6 @@ button { cursor: pointer; }
 /* Zonas oscuras: el foco y los textos de apoyo se aclaran */
 .encabezado--oscuro,
 .zona-oscura,
-.hero,
 .pie {
   --foco: var(--blanco);
 }
@@ -164,7 +163,68 @@ button { cursor: pointer; }
   border-bottom: var(--trazo) solid var(--negro-2);
 }
 .encabezado--oscuro { background: var(--negro-2); border-bottom: 1px solid rgb(244 244 244 / 0.22); color: var(--blanco); }
-.encabezado__fila { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 64px; }
+.encabezado__fila { display: flex; align-items: center; justify-content: space-between; gap: 8px 16px; min-height: 66px; }
+.encabezado__llamar svg { flex: none; }
+
+/* ----- Navegación tipo píldora segmentada -----
+   El fondo negro (un solo elemento) se mueve con transform hacia el enlace resaltado. */
+.nav-pildora {
+  position: relative;
+  margin-left: auto;
+  padding: 0;
+  border: 2px solid var(--negro-2);
+  border-radius: 999px;
+  background: var(--blanco);
+}
+.nav-pildora__lista { position: relative; display: flex; margin: 0; padding: 0; list-style: none; }
+.nav-pildora__fondo {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  border-radius: 999px;
+  background: var(--negro-2);
+  pointer-events: none;
+}
+.nav-pildora--lista .nav-pildora__fondo {
+  transition:
+    transform 0.4s var(--salida),
+    width 0.4s var(--salida),
+    opacity 0.2s;
+}
+.nav-pildora__enlace {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 1.05em;
+  border-radius: 999px;
+  color: var(--tinta);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color 0.25s;
+}
+.nav-pildora__enlace--sobre { color: var(--blanco); }
+.nav-pildora__enlace:focus-visible { outline-offset: 4px; }
+.encabezado--oscuro .nav-pildora { border-color: var(--blanco); background: transparent; }
+.encabezado--oscuro .nav-pildora__fondo { background: var(--blanco); }
+.encabezado--oscuro .nav-pildora__enlace { color: var(--blanco); }
+.encabezado--oscuro .nav-pildora__enlace--sobre { color: var(--negro-2); }
+
+/* Celular: solo el logo, la píldora más compacta y el botón de llamar con "119" */
+@media (max-width: 720px) {
+  .encabezado__fila { gap: 6px; }
+  .encabezado .marca__texto { display: none; }
+  .nav-pildora__enlace { padding: 0 0.6em; font-size: 0.7rem; letter-spacing: 0.03em; }
+  .encabezado__llamar { gap: 0.35em; padding-inline: 0.6em; }
+  .encabezado__llamar-texto { display: none; }
+}
+@media (max-width: 380px) {
+  .encabezado__llamar svg { display: none; }
+}
 .marca { display: inline-flex; align-items: center; gap: 10px; color: inherit; text-decoration: none; }
 .marca__texto { display: grid; line-height: 1.1; }
 .marca__texto strong {
