@@ -337,7 +337,7 @@ export default function Reportar() {
             )}
             <button
               type="submit"
-              className="boton boton--primario boton--grande boton--bloque"
+              className="boton boton--primario boton--grande boton--bloque boton--enviar"
               disabled={!listo || enviando}
               aria-describedby={listo ? undefined : 'envio-faltan'}
             >

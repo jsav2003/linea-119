@@ -429,6 +429,12 @@ select.campo__control {
 .campo--error .campo__control { border-color: var(--rojo); background: #fff6f6; box-shadow: 4px 4px 0 var(--rojo); }
 .campo__error { margin: 0; color: var(--rojo-texto); font-size: var(--t-pequeno); font-weight: 750; }
 .campo__error::before { content: '⚠ '; }
+/* El mensaje de error aparece con una transición corta (sin distraer) */
+.campo__error { animation: error-aparece 0.22s var(--salida); }
+@keyframes error-aparece {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: none; }
+}
 
 /* Opciones con forma de botón (radio) */
 .opciones { display: flex; flex-wrap: wrap; gap: 10px; }
@@ -521,6 +527,19 @@ select.campo__control {
 .burbuja small { display: block; margin-bottom: 2px; font-size: 0.75rem; font-weight: 600; opacity: 0.75; }
 .burbuja--operador { background: #e0e7ff; color: #1e1b4b; border-bottom-left-radius: 4px; }
 .burbuja--ciudadano { margin-left: auto; background: #dcfce7; color: #14532d; border-bottom-right-radius: 4px; }
+
+/* ----- Piezas compartidas, con el estilo brutalista solo en las pantallas del ciudadano ----- */
+.pagina-ciudadano .insignia-estado { border: 2px solid currentColor; border-radius: 0; font-size: 0.72rem; letter-spacing: 0.04em; text-transform: uppercase; }
+.pagina-ciudadano .insignia-grupo { border: 2px solid var(--negro-2); border-radius: 0; }
+.pagina-ciudadano .insignia-grupo__punto { border-radius: 0; }
+.pagina-ciudadano .galeria__miniaturas { gap: 12px; }
+.pagina-ciudadano .galeria__miniatura { border: var(--trazo) solid var(--negro-2); border-radius: 0; box-shadow: var(--sombra-sm); }
+.pagina-ciudadano .galeria__video,
+.pagina-ciudadano .galeria__ampliada { border: var(--trazo) solid var(--negro-2); border-radius: 0; }
+.pagina-ciudadano .burbuja { border: 2px solid var(--negro-2); border-radius: 0; box-shadow: 3px 3px 0 var(--negro-2); }
+.pagina-ciudadano .burbuja--operador { background: #fff; color: var(--tinta); }
+.pagina-ciudadano .burbuja--ciudadano { background: var(--negro-2); color: var(--blanco); box-shadow: 3px 3px 0 var(--gris); }
+.pagina-ciudadano .burbuja small { opacity: 0.85; }
 
 /* Movimiento reducido: sin desplazamientos ni animaciones, todo aparece ya en su lugar */
 @media (prefers-reduced-motion: reduce) {
