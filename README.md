@@ -124,6 +124,27 @@ edificios, rodeado por los 7 grupos de emergencia como pines del mapa, con los m
 - Respeta `prefers-reduced-motion`: el camión ya está en su lugar, sin destellos ni movimientos, y el
   chorro de agua aparece quieto.
 
+### Diseño y movimiento
+Estilo «editorial brutalista»: base monocromática (negro, blanco, gris papel) con un solo acento rojo,
+bordes gruesos y sombras duras en botones, tarjetas y campos. Títulos en Archivo (ancha, en mayúsculas)
+y texto en Inter Tight. Los colores de los 7 grupos son los mismos de `data/grupos.js` y solo aparecen
+en las tarjetas de grupo, los pines y las insignias.
+
+- **Landing:** titular gigante que sube por líneas al cargar; navegación tipo píldora con un fondo que se
+  desliza al enlace bajo el mouse (`NavPildora.jsx`); una frase cuyas palabras pasan de gris a blanco con
+  el scroll (`FraseQueSeLlena.jsx`); cifras que cuentan al aparecer (`Cifra.jsx`, solo datos del
+  proyecto); tarjetas que aparecen escalonadas (`useAlAparecer.js`, con `IntersectionObserver`) y
+  parallax suave en la escena 3D.
+- **Formulario y confirmación:** sobrios, solo transiciones cortas (errores, preguntas del grupo 300,
+  miniaturas). El botón de enviar se «hunde» al presionarlo. En la confirmación el estado entra con una
+  animación y la línea de tiempo se llena tramo por tramo.
+- **Tablero del operador:** se mantiene oscuro y sobrio; los contadores cuentan al cambiar
+  (`NumeroAnimado.jsx`), los reportes nuevos y los cambios de estado entran con una transición y el
+  detalle tiene títulos de sección más claros.
+- Sin librerías de animación: animaciones CSS, `requestAnimationFrame` e `IntersectionObserver`.
+- Accesibilidad: contraste AA, foco visible en todos los controles, áreas táctiles de 44 px y, con
+  `prefers-reduced-motion`, todo aparece ya en su lugar (frase llena, cifras contadas, sin desplazamientos).
+
 ## Arquitectura
 
 ```
