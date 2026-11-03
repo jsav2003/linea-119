@@ -22,7 +22,7 @@ export default function DetalleReporte({ reporte: r, onCerrar, onSeleccionar }) 
         <div>
           <p className="detalle__radicado">{r.id}</p>
           <div className="detalle__insignias">
-            <InsigniaEstado estado={r.estado} />
+            <InsigniaEstado key={r.estado} estado={r.estado} />
             <InsigniaGrupo codigo={r.grupo} conNombre />
             {esCritico(r) && <span className="critico">⚠ Crítico</span>}
           </div>
