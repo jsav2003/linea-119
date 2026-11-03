@@ -1,48 +1,48 @@
 import { useRef } from 'react'
-import { useFrame } from '@react-three/fiber'
+import { PAPEL, Pieza, useDesplazamiento, useMateriales } from './estilo.jsx'
 
-const LARGO = 18
-const LINEAS = 9
+const LARGO = 44 // más largo de lo que alcanza a ver la cámara: así no se ven los bordes
+const LARGO_LINEAS = 30
+const LINEAS = 15
 
-// Vía con línea central discontinua. Cuando el camión "avanza" no se mueve el camión:
-// se mueven las líneas hacia atrás (como en los videojuegos de carros).
+const MATERIALES = {
+  piso: { color: PAPEL },
+  asfalto: { color: '#2b2b2b' },
+  anden: { color: '#ececec' },
+  linea: { color: '#f4f4f4', emissive: '#f4f4f4', emissiveIntensity: 0.2 },
+}
+
+// Vía con línea central discontinua, andén delgado adelante y andén ancho atrás (donde van los edificios).
+// Cuando el camión "avanza" no se mueve el camión: se mueven las líneas hacia atrás.
 export default function Carretera({ enMovimiento }) {
   const lineas = useRef()
-
-  useFrame((_, delta) => {
-    if (!enMovimiento) return
-    for (const linea of lineas.current.children) {
-      linea.position.x -= delta * 6
-      if (linea.position.x < -LARGO / 2) linea.position.x += LARGO // vuelve a entrar por delante
-    }
-  })
+  const m = useMateriales(MATERIALES)
+  useDesplazamiento(lineas, enMovimiento, LARGO_LINEAS)
 
   return (
     <group>
-      {/* Piso alrededor */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.02, 0]} receiveShadow>
-        <planeGeometry args={[60, 60]} />
-        <meshStandardMaterial color="#111827" />
+      {/* Piso alrededor, del mismo gris papel del fondo */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.02, 0]} material={m.piso} receiveShadow>
+        <planeGeometry args={[80, 80]} />
       </mesh>
 
-      {/* Asfalto y andenes */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+      {/* Asfalto y andenes (el contorno negro marca los bordes) */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} material={m.asfalto} receiveShadow>
         <planeGeometry args={[LARGO, 3.2]} />
-        <meshStandardMaterial color="#334155" roughness={0.95} />
       </mesh>
-      {[1.85, -1.85].map((z) => (
-        <mesh key={z} position={[0, 0.06, z]} receiveShadow>
-          <boxGeometry args={[LARGO, 0.12, 0.5]} />
-          <meshStandardMaterial color="#64748b" />
-        </mesh>
-      ))}
+      <Pieza tam={[LARGO, 0.12, 0.5]} pos={[0, 0.06, 1.85]} material={m.anden} sombra={false} />
+      <Pieza tam={[LARGO, 0.12, 2.3]} pos={[0, 0.06, -2.75]} material={m.anden} sombra={false} />
 
       {/* Línea central discontinua */}
       <group ref={lineas}>
         {Array.from({ length: LINEAS }, (_, i) => (
-          <mesh key={i} rotation={[-Math.PI / 2, 0, 0]} position={[-LARGO / 2 + (i * LARGO) / LINEAS, 0.005, 0.45]}>
+          <mesh
+            key={i}
+            rotation={[-Math.PI / 2, 0, 0]}
+            position={[-LARGO_LINEAS / 2 + (i * LARGO_LINEAS) / LINEAS, 0.005, 0.45]}
+            material={m.linea}
+          >
             <planeGeometry args={[0.9, 0.09]} />
-            <meshStandardMaterial color="#f8fafc" emissive="#f8fafc" emissiveIntensity={0.15} />
           </mesh>
         ))}
       </group>

@@ -3,6 +3,7 @@ import { useFrame } from '@react-three/fiber'
 import { Html, useCursor } from '@react-three/drei'
 import * as THREE from 'three'
 import { GRUPOS } from '../data/grupos.js'
+import { Contorno, rampaToon } from './estilo.jsx'
 
 const RADIO = 3.1
 const ALTURA = 2.25
@@ -76,15 +77,18 @@ function Pin({ grupo, posicion, fase, activo, onEncima, onFuera, onElegir, reduc
       {/* Cabeza redonda + punta (cono invertido): la misma forma de gota del pin del mapa */}
       <mesh position={[0, 0.22, 0]} castShadow>
         <sphereGeometry args={[0.2, 24, 16]} />
-        <meshStandardMaterial color={grupo.color} emissive={grupo.color} emissiveIntensity={activo ? 0.9 : 0.35} />
+        <meshToonMaterial color={grupo.color} emissive={grupo.color} emissiveIntensity={activo ? 0.6 : 0.15} gradientMap={rampaToon()} />
+        <Contorno grosor={2.5} />
       </mesh>
       <mesh position={[0, -0.05, 0]} rotation={[Math.PI, 0, 0]} castShadow>
         <coneGeometry args={[0.15, 0.4, 24]} />
-        <meshStandardMaterial color={grupo.color} emissive={grupo.color} emissiveIntensity={activo ? 0.9 : 0.35} />
+        <meshToonMaterial color={grupo.color} emissive={grupo.color} emissiveIntensity={activo ? 0.6 : 0.15} gradientMap={rampaToon()} />
+        <Contorno grosor={2.5} />
       </mesh>
       <mesh position={[0, 0.22, 0]}>
         <torusGeometry args={[0.2, 0.025, 8, 32]} />
-        <meshStandardMaterial color="#ffffff" />
+        <meshToonMaterial color="#ffffff" gradientMap={rampaToon()} />
+        <Contorno grosor={1} />
       </mesh>
 
       {activo && (

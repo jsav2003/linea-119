@@ -22,52 +22,54 @@
 .hero__escena { min-width: 0; }
 
 /* Escena 3D */
+/* Marco brutalista: borde negro grueso y sombra dura roja (se ve sobre fondo claro y oscuro) */
 .escena {
   position: relative;
   overflow: hidden;
-  border: 1px solid rgb(255 255 255 / 0.1);
-  border-radius: 22px;
-  background: #0f172a;
-  box-shadow: 0 30px 80px rgb(0 0 0 / 0.45);
+  border: var(--trazo) solid var(--negro-2);
+  background: var(--papel);
+  box-shadow: 8px 8px 0 var(--rojo);
 }
-.escena__lienzo { height: 400px; }
+.escena__lienzo { height: 400px; touch-action: pan-y; }
+/* La pista va en una franja negra debajo del dibujo (no encima): siempre se lee */
 .escena__pista {
-  position: absolute;
-  right: 12px;
-  bottom: 10px;
-  left: 12px;
   margin: 0;
-  color: #cbd5e1;
-  font-size: 0.85rem;
+  padding: 10px 14px;
+  border-top: var(--trazo) solid var(--negro-2);
+  background: var(--negro-2);
+  color: var(--blanco);
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.35;
   text-align: center;
-  text-shadow: 0 1px 3px #000;
-  pointer-events: none;
 }
 .escena-respaldo {
   display: grid;
   place-items: center;
   height: 400px;
   padding: 16px;
-  border: 1px dashed rgb(255 255 255 / 0.15);
-  border-radius: 22px;
-  color: #94a3b8;
+  border: var(--trazo) dashed var(--gris);
+  background: var(--papel);
+  color: var(--tinta);
+  font-weight: 600;
   text-align: center;
 }
 
 /* Etiqueta HTML sobre un pin 3D (drei <Html>) */
 .etiqueta-3d {
   display: grid;
-  min-width: 170px;
-  padding: 8px 12px;
-  border-left: 5px solid var(--color);
-  border-radius: 10px;
-  background: #fff;
-  color: #1c1917;
-  font: 13px/1.3 system-ui, sans-serif;
-  box-shadow: 0 8px 24px rgb(0 0 0 / 0.35);
+  min-width: 180px;
+  padding: 8px 12px 8px 14px;
+  border: var(--trazo) solid var(--negro-2);
+  border-left: 10px solid var(--color);
+  background: var(--blanco);
+  color: var(--tinta);
+  font: 600 13px/1.3 var(--fuente);
+  box-shadow: 4px 4px 0 var(--negro-2);
   pointer-events: none;
 }
-.etiqueta-3d small { color: #57534e; }
+.etiqueta-3d strong { font-family: var(--fuente-titular); font-size: 1.1em; font-stretch: 112%; }
+.etiqueta-3d small { color: var(--tinta-3); font-weight: 600; }
 
 /* Secciones */
 .seccion { padding: 56px 0 8px; }
