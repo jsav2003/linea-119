@@ -14,8 +14,8 @@ Parcial final · Desarrollo Web 2026-2 · Universidad de San Buenaventura Cali.
 
 | Nombre | Código |
 | --- | --- |
-| Juan Sebastián Arévalo | _pendiente_ |
-| _pendiente_ | _pendiente_ |
+| Juan Sebastián Arévalo Vásquez | 30000098552 |
+| María Fernanda Giraldo Duque | 30000128046 |
 
 ## Cómo correrlo
 
