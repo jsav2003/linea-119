@@ -124,6 +124,7 @@ button { cursor: pointer; }
 /* Barra de texto pequeño en mayúsculas (antetítulos, etiquetas) */
 .rotulo {
   font-family: var(--fuente);
+  font-stretch: 100%;
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -523,7 +524,13 @@ select.campo__control {
 
 /* Movimiento reducido: sin desplazamientos ni animaciones, todo aparece ya en su lugar */
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+  }
   .boton:hover,
   .tarjeta-grupo:hover,
   .opcion:hover span,
