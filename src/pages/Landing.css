@@ -1,116 +1,281 @@
-/* ===== Landing (/) ===== */
-.hero {
-  padding: 40px 0 56px;
-  background:
-    radial-gradient(1100px 520px at 85% 15%, rgb(220 38 38 / 0.28), transparent 60%),
-    linear-gradient(180deg, #0b1120, #111827);
-  color: #f8fafc;
+/* ===== Landing (/) — editorial brutalista ===== */
+html { scroll-padding-top: 80px; } /* al saltar a #como-funciona, que el encabezado fijo no lo tape */
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
 }
-.hero__grid { display: grid; grid-template-columns: 1fr 1.05fr; align-items: center; gap: 40px; }
-.hero__antetitulo {
-  margin-bottom: 12px;
-  color: #fca5a5;
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-.hero h1 { margin-bottom: 16px; font-size: clamp(2.3rem, 5vw, 3.7rem); letter-spacing: -0.025em; }
-.hero__lead { max-width: 34em; color: #cbd5e1; font-size: 1.15rem; }
-.hero__acciones { display: flex; flex-wrap: wrap; gap: 12px; margin: 26px 0 14px; }
-.hero__nota { margin: 0; color: #94a3b8; font-size: 0.9rem; }
-.hero__escena { min-width: 0; }
 
-/* Escena 3D */
+/* ----- Hero: gris papel, titular gigante a todo el ancho ----- */
+.hero { padding: clamp(18px, 3.5vw, 40px) 0 clamp(40px, 6vw, 72px); background: var(--papel); color: var(--tinta); }
+.hero__antetitulo { margin-bottom: clamp(10px, 1.6vw, 18px); color: var(--tinta-2); }
+.hero__titulo {
+  margin: 0 0 clamp(18px, 3vw, 36px);
+  font-size: clamp(2.55rem, 11.2vw, 10rem);
+}
+/* Máscara de cada línea: deja ver la letra completa (tildes y signos) pero oculta lo que sube desde abajo */
+.hero__linea { display: block; overflow: hidden; margin-block: -0.06em; padding-block: 0.06em 0.08em; }
+.hero__linea > span { display: block; }
+
+.hero__grid { display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); align-items: start; gap: clamp(24px, 4vw, 56px); }
+.hero__lead { max-width: 30em; margin-bottom: 0; color: var(--tinta-2); font-size: clamp(1.05rem, 1.4vw, 1.25rem); line-height: 1.45; }
+.hero__acciones { display: flex; flex-wrap: wrap; gap: 16px; margin: 24px 0 16px; }
+.hero__nota { max-width: 32em; margin: 0; padding-left: 12px; border-left: var(--trazo) solid var(--rojo); color: var(--tinta-2); font-size: 0.9rem; }
+.hero__escena { min-width: 0; will-change: transform; }
+
+/* ----- Escena 3D ----- */
+/* Marco brutalista: borde negro grueso y sombra dura roja */
 .escena {
   position: relative;
   overflow: hidden;
-  border: 1px solid rgb(255 255 255 / 0.1);
-  border-radius: 22px;
-  background: #0f172a;
-  box-shadow: 0 30px 80px rgb(0 0 0 / 0.45);
+  border: var(--trazo) solid var(--negro-2);
+  background: var(--papel);
+  box-shadow: 8px 8px 0 var(--rojo);
 }
-.escena__lienzo { height: 400px; }
+.escena__lienzo { height: clamp(300px, 34vw, 440px); touch-action: pan-y; }
+/* La pista va en una franja negra debajo del dibujo (no encima): siempre se lee */
 .escena__pista {
-  position: absolute;
-  right: 12px;
-  bottom: 10px;
-  left: 12px;
   margin: 0;
-  color: #cbd5e1;
-  font-size: 0.85rem;
+  padding: 10px 14px;
+  border-top: var(--trazo) solid var(--negro-2);
+  background: var(--negro-2);
+  color: var(--blanco);
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.35;
   text-align: center;
-  text-shadow: 0 1px 3px #000;
-  pointer-events: none;
 }
 .escena-respaldo {
   display: grid;
   place-items: center;
-  height: 400px;
+  height: clamp(300px, 34vw, 440px);
   padding: 16px;
-  border: 1px dashed rgb(255 255 255 / 0.15);
-  border-radius: 22px;
-  color: #94a3b8;
+  border: var(--trazo) dashed var(--gris);
+  background: var(--papel);
+  color: var(--tinta);
+  font-weight: 600;
   text-align: center;
 }
 
 /* Etiqueta HTML sobre un pin 3D (drei <Html>) */
 .etiqueta-3d {
   display: grid;
-  min-width: 170px;
-  padding: 8px 12px;
-  border-left: 5px solid var(--color);
-  border-radius: 10px;
-  background: #fff;
-  color: #1c1917;
-  font: 13px/1.3 system-ui, sans-serif;
-  box-shadow: 0 8px 24px rgb(0 0 0 / 0.35);
+  min-width: 180px;
+  padding: 8px 12px 8px 14px;
+  border: var(--trazo) solid var(--negro-2);
+  border-left: 10px solid var(--color);
+  background: var(--blanco);
+  color: var(--tinta);
+  font: 600 13px/1.3 var(--fuente);
+  box-shadow: 4px 4px 0 var(--negro-2);
   pointer-events: none;
 }
-.etiqueta-3d small { color: #57534e; }
+.etiqueta-3d strong { font-family: var(--fuente-titular); font-size: 1.1em; font-stretch: 112%; }
+.etiqueta-3d small { color: var(--tinta-3); font-weight: 600; }
 
-/* Secciones */
-.seccion { padding: 56px 0 8px; }
-.seccion h2 { font-size: clamp(1.5rem, 3vw, 2rem); }
-.seccion__intro { max-width: 46em; color: var(--tinta-2); }
-
-.pasos-landing { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 20px 0 0; padding: 0; list-style: none; }
-.pasos-landing li { padding: 22px; border: 1px solid var(--borde); border-radius: var(--radio); background: var(--superficie); box-shadow: var(--sombra); }
-.pasos-landing h3 { margin-bottom: 6px; font-size: 1.15rem; }
-.pasos-landing p { margin: 0; color: var(--tinta-2); }
-.pasos-landing__numero {
-  display: inline-grid;
+/* ----- Barra de texto en mayúsculas con líneas finas ----- */
+.barra-texto { border-block: 1px solid var(--negro-2); background: var(--papel); }
+.barra-texto__fila {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 8px 16px;
+  min-height: 56px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.barra-texto__der { text-align: right; }
+.barra-texto__bajar {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  color: inherit;
+  text-decoration: none;
+}
+.barra-texto__bajar:hover .flecha-circular { background: var(--negro-2); color: var(--blanco); }
+.flecha-circular {
+  display: grid;
   place-items: center;
-  width: 38px;
-  height: 38px;
-  margin-bottom: 12px;
+  flex: none;
+  width: 34px;
+  height: 34px;
+  border: 1.5px solid var(--negro-2);
   border-radius: 50%;
-  background: var(--rojo-suave);
-  color: var(--rojo);
+  transition: background-color var(--rapido), color var(--rapido);
+}
+
+/* ----- Secciones ----- */
+.seccion { padding: clamp(56px, 8vw, 112px) 0 0; }
+.seccion__cabeza {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
+  align-items: start;
+  gap: 4px 24px;
+  margin-bottom: clamp(28px, 4vw, 48px);
+  padding-top: 14px;
+  border-top: 1px solid var(--negro-2);
+}
+.seccion__indice { margin: 0.4em 0 0; }
+.seccion__cabeza h2 { margin: 0; font-size: var(--t-1); }
+.seccion__intro { grid-column: 2; max-width: 40em; margin: 14px 0 0; color: var(--tinta-2); font-size: 1.05rem; }
+
+/* Cómo funciona: tres tarjetas brutalistas con número grande */
+.pasos-landing { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(18px, 2.4vw, 28px); margin: 0; padding: 0; list-style: none; }
+.pasos-landing li {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  padding: clamp(20px, 2.4vw, 28px);
+  border: var(--trazo) solid var(--negro-2);
+  background: var(--blanco);
+  box-shadow: var(--sombra);
+}
+.pasos-landing__numero {
+  color: var(--rojo); /* texto grande: 4.4:1 sobre blanco, cumple AA */
+  font-family: var(--fuente-titular);
+  font-size: clamp(3rem, 6vw, 4.75rem);
+  font-stretch: 110%;
   font-weight: 800;
+  letter-spacing: -0.06em;
+  line-height: 0.8;
+}
+.pasos-landing h3 {
+  margin: 8px 0 0;
+  font-family: var(--fuente-titular);
+  font-size: var(--t-3);
+  font-stretch: 108%;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+.pasos-landing p { margin: 0; color: var(--tinta-2); }
+
+.grupos-landing { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: clamp(18px, 2.2vw, 26px); margin: 0; padding: 0; list-style: none; }
+
+/* ----- Pie: negro, con la marca gigante y el acceso del radio operador ----- */
+.pie { margin-top: clamp(72px, 10vw, 140px); padding: clamp(32px, 5vw, 56px) 0 32px; background: var(--negro-2); color: var(--blanco); }
+.pie .pie__marca {
+  margin: 0 0 clamp(20px, 3vw, 36px);
+  font-family: var(--fuente-titular);
+  font-size: clamp(3rem, 14.5vw, 13rem);
+  font-stretch: 104%;
+  font-weight: 640;
+  letter-spacing: -0.06em;
+  line-height: 0.82;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--blanco);
+  max-width: none;
+}
+.pie__fila { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 20px; padding-top: 20px; border-top: 1px solid rgb(244 244 244 / 0.3); }
+.pie p { max-width: 52em; margin: 0; color: var(--gris-claro); font-size: 0.9rem; }
+
+/* ----- Frase que se llena + panel de cifras (sobre negro) ----- */
+.frase { padding: clamp(72px, 11vw, 150px) 0 clamp(56px, 8vw, 110px); background: var(--negro-2); color: var(--blanco); }
+.frase .frase__rotulo { margin: 0 0 clamp(24px, 4vw, 44px); color: var(--gris-claro); font-size: 0.78rem; font-stretch: 100%; text-align: center; }
+.frase__texto {
+  max-width: 13em;
+  margin: 0 auto;
+  font-family: var(--fuente-titular);
+  font-size: clamp(2rem, 5.6vw, 4.9rem);
+  font-stretch: 100%;
+  font-weight: 620;
+  letter-spacing: -0.035em;
+  line-height: 1.04;
+  text-align: center;
+  text-wrap: balance;
+}
+.frase__palabra { color: var(--gris); transition: color 0.35s ease-out; }
+.frase__palabra--llena { color: var(--blanco); }
+
+.cifras {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: clamp(64px, 9vw, 120px) 0 0;
+  padding: 0;
+  border: 1px solid rgb(244 244 244 / 0.35);
+  list-style: none;
+}
+.cifra {
+  display: grid;
+  align-content: space-between;
+  gap: 28px;
+  min-height: clamp(170px, 18vw, 240px);
+  padding: clamp(18px, 2vw, 26px);
+  border-left: 1px solid rgb(244 244 244 / 0.35);
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.6s ease-out,
+    transform 0.8s var(--salida);
+  transition-delay: calc(var(--orden, 0) * 90ms);
+}
+.cifra:first-child { border-left: 0; }
+.cifra--visible { opacity: 1; transform: none; }
+.cifra__numero {
+  margin: 0;
+  font-family: var(--fuente-titular);
+  font-size: clamp(3.4rem, 7vw, 6.5rem);
+  font-stretch: 110%;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.06em;
+  line-height: 0.8;
+}
+.cifra__etiqueta { max-width: 16em; margin: 0; color: var(--gris-claro); font-size: 0.92rem; }
+
+/* ----- Movimiento al cargar -----
+   1. El titular sube por líneas desde su máscara (1 s, cada línea 110 ms después).
+   2. La escena 3D sube 40 px, pasa de borrosa a enfocada y aparece (1.3 s).
+   3. El resto sube 14 px y aparece, cada elemento 55 ms después del anterior. */
+.hero__linea > span { animation: linea-sube 1s var(--salida) both; animation-delay: calc(120ms + var(--i, 0) * 110ms); }
+.hero__escena-entrada { animation: escena-entra 1.3s var(--salida) 0.3s both; }
+.entrada { animation: subir 0.8s var(--salida) both; animation-delay: calc(380ms + var(--orden, 0) * 55ms); }
+@keyframes linea-sube {
+  from { transform: translateY(108%); }
+  to { transform: none; }
+}
+@keyframes escena-entra {
+  from { opacity: 0; transform: translateY(40px); filter: blur(14px); }
+  to { opacity: 1; transform: none; filter: none; }
+}
+@keyframes subir {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
 }
 
-.grupos-landing { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; margin: 20px 0 0; padding: 0; list-style: none; }
+/* ----- Movimiento al bajar: las tarjetas aparecen escalonadas ----- */
+.revelar > li {
+  opacity: 0;
+  transform: translateY(26px);
+  transition:
+    opacity 0.55s ease-out,
+    transform 0.8s var(--salida);
+  transition-delay: calc(var(--orden, 0) * 70ms);
+}
+.revelar--visible > li { opacity: 1; transform: none; }
 
-/* Pie de página con el acceso del radio operador */
-.pie { margin-top: 64px; padding: 28px 0; background: #0b1120; color: #cbd5e1; }
-.pie__fila { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 20px; }
-.pie p { max-width: 52em; margin: 0; font-size: 0.9rem; }
-
+/* ----- Tableta ----- */
 @media (max-width: 900px) {
-  .hero { padding: 22px 0 36px; }
-  .hero__grid { grid-template-columns: 1fr; gap: 24px; }
-  .hero__lead { font-size: 1.05rem; }
-  .hero__acciones { margin-top: 20px; }
-  .escena__lienzo,
-  .escena-respaldo { height: 320px; }
-  .pasos-landing { grid-template-columns: 1fr; }
+  .hero__grid { grid-template-columns: minmax(0, 1fr); }
+  .pasos-landing { grid-template-columns: minmax(0, 1fr); }
+  .cifras { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cifra:nth-child(3) { border-left: 0; }
+  .cifra:nth-child(n + 3) { border-top: 1px solid rgb(244 244 244 / 0.35); }
+  .seccion__cabeza { grid-template-columns: minmax(0, 1fr); }
+  .seccion__intro { grid-column: 1; }
 }
 
-@media (max-width: 480px) {
+/* ----- Celular ----- */
+@media (max-width: 600px) {
+  .hero__acciones { margin-top: 20px; }
   .hero__acciones .boton { width: 100%; }
-  .encabezado .marca__texto span { display: none; }
-  .escena__lienzo,
-  .escena-respaldo { height: 280px; }
-  .escena__pista { font-size: 0.78rem; }
+  .barra-texto__fila { grid-template-columns: 1fr 1fr; padding-block: 6px; }
+  .barra-texto__bajar { grid-column: 1 / -1; grid-row: 2; justify-self: center; }
+  .escena__pista { font-size: 0.76rem; }
+  .grupos-landing { grid-template-columns: minmax(0, 1fr); }
+  .cifras { grid-template-columns: minmax(0, 1fr); }
+  .cifra { min-height: 0; border-left: 0; }
+  .cifra:nth-child(n + 2) { border-top: 1px solid rgb(244 244 244 / 0.35); }
 }

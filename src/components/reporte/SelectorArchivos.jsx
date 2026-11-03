@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import Modal from '../Modal.jsx'
 import { RECOMENDACIONES_FOTOS } from '../../data/consejos.js'
+import { MAX_FOTOS } from '../../data/limites.js'
 
-const MAX_FOTOS = 3
 const MB = 1024 * 1024
 const MAX_PESO_FOTO = 15 * MB
 const MAX_PESO_VIDEO = 50 * MB

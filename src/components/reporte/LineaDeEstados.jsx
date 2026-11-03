@@ -16,6 +16,7 @@ export default function LineaDeEstados({ reporte }) {
           <li
             key={paso}
             className={`linea-estados__paso linea-estados__paso--${clase}`}
+            style={{ '--i': i }} // orden del tramo: se llenan uno tras otro
             aria-current={i === actual ? 'step' : undefined}
           >
             <span className="linea-estados__punto" aria-hidden="true">

@@ -94,19 +94,56 @@ Cada pregunta del interrogatorio inicial del protocolo es un bloque del formular
   coordenada.
 
 ### Escena 3D (`src/three/`)
-Un camión de bomberos armado solo con cajas y cilindros (sin modelos externos), sobre una vía, rodeado
-por los 7 grupos de emergencia como pines del mapa, con los mismos colores de `data/grupos.js`.
+Un camión de bomberos armado solo con cajas y cilindros (sin modelos externos), en una calle con
+edificios, rodeado por los 7 grupos de emergencia como pines del mapa, con los mismos colores de
+`data/grupos.js`.
 
-- **Luces:** ambiental, hemisférica, una direccional con sombras y dos `pointLight` en la sirena.
-- **`useFrame`:** sirena roja y azul que alterna, escalera que se levanta, ruedas que giran, vibración
-  del motor, líneas de la vía que se mueven, pines que flotan y giran, y la cámara que sigue al mouse.
-- **Mouse:** `onPointerOver` sobre el camión enciende la sirena; `onClick` lo hace «salir a la
-  emergencia». Al pasar el mouse por un pin aparece su grupo (`<Html>` de drei) y al hacer clic abre el
-  reporte con ese grupo ya elegido.
+- **Estilo de cómic (`estilo.jsx`):** `MeshToonMaterial` con una rampa de 3 tonos (colores planos, sin
+  degradados), contorno negro en cada pieza (`<Outlines>` de drei), sombras duras y fondo gris papel,
+  igual que el resto del sitio.
+- **El camión:** cabina con vidrios, reflejos, puertas, estribos, espejos, parrilla, faros y
+  direccionales; barra de luces de 5 segmentos; carrocería con persianas de compartimentos y rótulo;
+  guardabarros, luces traseras, carrete de manguera, tubo de escape, rines con rayos, escalera de dos
+  tramos y un cañón de agua en el techo.
+- **El entorno (`Carretera.jsx`, `Entorno.jsx`):** vía, andenes, una manzana de edificios con ventanas
+  (una textura de una ventana que cada fachada repite), postes de luz, un hidrante y conos.
+- **Luces:** ambiental, una direccional con sombras y dos `pointLight` en la sirena.
+- **`useFrame`:** el camión entra al cargar y frena; sirena roja y azul que alterna; escalera que se
+  levanta y se extiende; ruedas que giran según lo que avanza; vibración del motor; la calle y los
+  edificios se mueven hacia atrás; humo del escape; chorro de agua; pines que flotan y giran; y la
+  cámara que sigue al mouse.
+- **Partículas (`ChorroAgua.jsx`, `Humo.jsx`):** cada efecto es una sola `InstancedMesh` (un solo dibujo
+  para todas las gotas o bocanadas), que reutiliza las partículas que ya terminaron.
+- **Mouse y toque:** `onPointerOver` sobre el camión enciende la sirena; `onClick` lo hace «salir a la
+  emergencia»; tocar el cañón lanza agua. Al pasar el mouse por un pin aparece su grupo (`<Html>` de
+  drei) y al hacer clic abre el reporte con ese grupo ya elegido. Con mouse se puede arrastrar para girar
+  la maqueta (`<PresentationControls>`); en celular no, para que el dedo pueda hacer scroll.
 - El rótulo «BOMBEROS 119» se dibuja en un `<canvas>` 2D y se usa como textura (`CanvasTexture`).
 - Se carga con `React.lazy` después de mostrar la landing, así Three.js no retrasa el botón de reporte.
   Si el navegador no tiene WebGL, un `ErrorBoundary` muestra un mensaje en lugar de romper la página.
-- Respeta `prefers-reduced-motion`: sin destellos ni movimientos si la persona los desactivó.
+- Respeta `prefers-reduced-motion`: el camión ya está en su lugar, sin destellos ni movimientos, y el
+  chorro de agua aparece quieto.
+
+### Diseño y movimiento
+Estilo «editorial brutalista»: base monocromática (negro, blanco, gris papel) con un solo acento rojo,
+bordes gruesos y sombras duras en botones, tarjetas y campos. Títulos en Archivo (ancha, en mayúsculas)
+y texto en Inter Tight. Los colores de los 7 grupos son los mismos de `data/grupos.js` y solo aparecen
+en las tarjetas de grupo, los pines y las insignias.
+
+- **Landing:** titular gigante que sube por líneas al cargar; navegación tipo píldora con un fondo que se
+  desliza al enlace bajo el mouse (`NavPildora.jsx`); una frase cuyas palabras pasan de gris a blanco con
+  el scroll (`FraseQueSeLlena.jsx`); cifras que cuentan al aparecer (`Cifra.jsx`, solo datos del
+  proyecto); tarjetas que aparecen escalonadas (`useAlAparecer.js`, con `IntersectionObserver`) y
+  parallax suave en la escena 3D.
+- **Formulario y confirmación:** sobrios, solo transiciones cortas (errores, preguntas del grupo 300,
+  miniaturas). El botón de enviar se «hunde» al presionarlo. En la confirmación el estado entra con una
+  animación y la línea de tiempo se llena tramo por tramo.
+- **Tablero del operador:** se mantiene oscuro y sobrio; los contadores cuentan al cambiar
+  (`NumeroAnimado.jsx`), los reportes nuevos y los cambios de estado entran con una transición y el
+  detalle tiene títulos de sección más claros.
+- Sin librerías de animación: animaciones CSS, `requestAnimationFrame` e `IntersectionObserver`.
+- Accesibilidad: contraste AA, foco visible en todos los controles, áreas táctiles de 44 px y, con
+  `prefers-reduced-motion`, todo aparece ya en su lugar (frase llena, cifras contadas, sin desplazamientos).
 
 ## Arquitectura
 

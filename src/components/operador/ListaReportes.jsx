@@ -51,7 +51,8 @@ export default function ListaReportes({ reportes, seleccionadoId, onSeleccionar,
               <span className="item-reporte__barrio">{r.barrio}</span>
               <span className="item-reporte__que-ve">{r.queVe}</span>
               <span className="item-reporte__fila">
-                <InsigniaEstado estado={r.estado} />
+                {/* key: al cambiar de estado, la insignia se crea de nuevo y entra con una transición */}
+                <InsigniaEstado key={r.estado} estado={r.estado} />
                 <span className="item-reporte__extras">
                   {r.fotos?.length > 0 && <span title="Fotos">📷 {r.fotos.length}</span>}
                   {r.video && <span title="Video">🎥</span>}

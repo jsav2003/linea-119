@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import Logo from '../Logo.jsx'
 import BotonConfirmar from '../BotonConfirmar.jsx'
+import NumeroAnimado from './NumeroAnimado.jsx'
 import { useReportes } from '../../estado/ReportesContext.jsx'
 import { CLASE_ESTADO, ESTADOS } from '../../estado/estados.js'
 
@@ -30,7 +31,10 @@ export default function BarraOperador({ filtroEstado, onFiltrarEstado }) {
                 aria-pressed={activo}
                 onClick={() => onFiltrarEstado(activo ? 'todos' : estado)}
               >
-                <strong>{contar(estado)}</strong> {estado}
+                <strong>
+                  <NumeroAnimado valor={contar(estado)} />
+                </strong>{' '}
+                {estado}
               </button>
             </li>
           )
