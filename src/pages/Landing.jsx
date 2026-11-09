@@ -4,7 +4,7 @@ import Encabezado from '../components/Encabezado.jsx'
 import ErrorBoundary from '../components/ErrorBoundary.jsx'
 import FraseQueSeLlena from '../components/landing/FraseQueSeLlena.jsx'
 import Cifra from '../components/landing/Cifra.jsx'
-import { GRUPOS } from '../data/grupos.js'
+import { GRUPOS, grupoPorCodigo } from '../data/grupos.js'
 import { UNIDADES } from '../data/unidades.js'
 import { MAX_FOTOS } from '../data/limites.js'
 import { useTitulo } from '../hooks/useTitulo.js'
@@ -24,6 +24,15 @@ const CIFRAS = [
   { valor: UNIDADES.length, etiqueta: 'tipos de unidad que puede despachar el radio operador' },
   { valor: MAX_FOTOS, etiqueta: 'fotos y un video corto por reporte' },
   { valor: 24, sufijo: '/7', etiqueta: 'para llamar al 119 si hay personas en peligro inmediato' },
+]
+
+// Acceso rápido del hero: las emergencias más comunes, dichas como las vería la persona.
+// Abren el formulario con el grupo ya elegido.
+const ACCESOS = [
+  { codigo: 100, texto: 'Fuego o humo' },
+  { codigo: 300, texto: 'Herido o atrapado' },
+  { codigo: 400, texto: 'Gas o cables caídos' },
+  { codigo: 800, texto: 'Inundación o vendaval' },
 ]
 
 const PASOS = [
@@ -75,6 +84,7 @@ export default function Landing() {
                 <p className="hero__nota entrada" style={{ '--orden': 3 }}>
                   Si hay personas en peligro inmediato, llama: el reporte web no reemplaza la llamada.
                 </p>
+                <AccesoRapido />
               </div>
 
               <div className="hero__escena" ref={escena}>
@@ -175,10 +185,39 @@ export default function Landing() {
   )
 }
 
+// Acceso rápido bajo la nota del hero: llena el espacio junto a la escena 3D y acorta el camino
+// al formulario (cada botón llega con el grupo ya elegido).
+function AccesoRapido() {
+  return (
+    <nav className="acceso-rapido entrada" style={{ '--orden': 4 }} aria-labelledby="titulo-acceso-rapido">
+      <p id="titulo-acceso-rapido" className="rotulo acceso-rapido__titulo">
+        ¿Qué estás viendo? Empieza por aquí
+      </p>
+      <ul className="acceso-rapido__lista">
+        {ACCESOS.map(({ codigo, texto }) => (
+          <li key={codigo}>
+            <Link
+              to={`/reportar?grupo=${codigo}`}
+              className="acceso-rapido__enlace"
+              style={{ '--color': grupoPorCodigo(codigo)?.color }}
+            >
+              <span className="acceso-rapido__codigo">{codigo}</span>
+              <span className="acceso-rapido__texto">{texto}</span>
+              <span className="acceso-rapido__flecha" aria-hidden="true">
+                →
+              </span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )
+}
+
 // Barra de texto en mayúsculas bajo el hero, con líneas finas arriba y abajo
 function BarraTexto() {
   return (
-    <div className="barra-texto entrada" style={{ '--orden': 4 }}>
+    <div className="barra-texto entrada" style={{ '--orden': 5 }}>
       <div className="contenedor contenedor--ancho barra-texto__fila">
         <span className="barra-texto__izq">Línea 119 · Bomberos Cali</span>
         <a href="#como-funciona" className="barra-texto__bajar">

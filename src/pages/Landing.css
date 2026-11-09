@@ -20,6 +20,45 @@ html { scroll-padding-top: 80px; } /* al saltar a #como-funciona, que el encabez
 .hero__acciones { display: flex; flex-wrap: wrap; gap: 16px; margin: 24px 0 16px; }
 .hero__nota { max-width: 32em; margin: 0; padding-left: 12px; border-left: var(--trazo) solid var(--rojo); color: var(--tinta-2); font-size: 0.9rem; }
 .hero__escena { min-width: 0; will-change: transform; }
+/* ----- Acceso rápido: tarjetas pequeñas como las de grupo (franja de color a la izquierda) ----- */
+.acceso-rapido { margin-top: clamp(28px, 3.2vw, 40px); }
+.acceso-rapido__titulo { margin: 0 0 12px; color: var(--tinta-2); }
+.acceso-rapido__lista { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 14px; margin: 0; padding: 0; list-style: none; }
+.acceso-rapido__enlace {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 100%;
+  min-height: 54px;
+  padding: 8px 12px 8px 24px;
+  border: var(--trazo) solid var(--negro-2);
+  background: var(--blanco);
+  box-shadow: var(--sombra-sm);
+  color: var(--tinta);
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-decoration: none;
+  transition:
+    transform 0.22s var(--salida),
+    box-shadow 0.22s var(--salida);
+}
+.acceso-rapido__enlace::before { content: ''; position: absolute; inset: 0 auto 0 0; width: 10px; border-right: var(--trazo) solid var(--negro-2); background: var(--color); }
+.acceso-rapido__codigo {
+  flex: none;
+  font-family: var(--fuente-titular);
+  font-size: 1.2rem;
+  font-stretch: 112%;
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  font-variant-numeric: tabular-nums;
+}
+.acceso-rapido__flecha { flex: none; margin-left: auto; font-size: 1.1rem; transition: transform 0.22s var(--salida); }
+/* Al pasar el mouse sube y la sombra toma el color del grupo (como .tarjeta-grupo) */
+.acceso-rapido__enlace:hover { transform: translateY(-3px); box-shadow: 5px 7px 0 var(--color); }
+.acceso-rapido__enlace:hover .acceso-rapido__flecha { transform: translateX(3px); }
+.acceso-rapido__enlace:active { transform: translate(3px, 3px); box-shadow: 0 0 0 var(--color); transition-duration: 0.05s; }
 
 /* ----- Escena 3D ----- */
 /* Marco brutalista: borde negro grueso y sombra dura roja */
@@ -275,7 +314,19 @@ html { scroll-padding-top: 80px; } /* al saltar a #como-funciona, que el encabez
   .barra-texto__bajar { grid-column: 1 / -1; grid-row: 2; justify-self: center; }
   .escena__pista { font-size: 0.76rem; }
   .grupos-landing { grid-template-columns: minmax(0, 1fr); }
+  .acceso-rapido__lista { gap: 10px; }
+  .acceso-rapido__enlace { gap: 8px; padding: 8px 8px 8px 20px; font-size: 0.84rem; }
+  .acceso-rapido__enlace::before { width: 8px; }
+  .acceso-rapido__codigo { font-size: 1.05rem; }
+  .acceso-rapido__flecha { display: none; } /* en celular el espacio es para el texto */
   .cifras { grid-template-columns: minmax(0, 1fr); }
   .cifra { min-height: 0; border-left: 0; }
   .cifra:nth-child(n + 2) { border-top: 1px solid rgb(244 244 244 / 0.35); }
+}
+@media (max-width: 380px) {
+  .acceso-rapido__lista { grid-template-columns: minmax(0, 1fr); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .acceso-rapido__enlace:hover,
+  .acceso-rapido__enlace:hover .acceso-rapido__flecha { transform: none; }
 }
