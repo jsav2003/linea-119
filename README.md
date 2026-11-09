@@ -138,9 +138,13 @@ en las tarjetas de grupo, los pines y las insignias.
 - **Formulario y confirmación:** sobrios, solo transiciones cortas (errores, preguntas del grupo 300,
   miniaturas). El botón de enviar se «hunde» al presionarlo. En la confirmación el estado entra con una
   animación y la línea de tiempo se llena tramo por tramo.
-- **Tablero del operador:** se mantiene oscuro y sobrio; los contadores cuentan al cambiar
-  (`NumeroAnimado.jsx`), los reportes nuevos y los cambios de estado entran con una transición y el
-  detalle tiene títulos de sección más claros.
+- **Tablero del operador:** el mismo lenguaje del resto del sitio en versión compacta: paleta de la marca
+  (gris papel, blanco, negro y rojo), tipografías Archivo e Inter Tight, esquinas rectas, bordes negros y
+  sombras duras, la misma navegación tipo píldora y un mapa base en grises con controles a juego. Los
+  contadores son una franja que filtra la lista y cuentan al cambiar (`NumeroAnimado.jsx`); los reportes
+  nuevos y los cambios de estado entran con una transición; el reporte abierto toma el color de su grupo
+  (como la tarjeta elegida del formulario) y los pasos de atención se numeran en cuadros: rojo el actual,
+  negro los hechos.
 - Sin librerías de animación: animaciones CSS, `requestAnimationFrame` e `IntersectionObserver`.
 - Accesibilidad: contraste AA, foco visible en todos los controles, áreas táctiles de 44 px y, con
   `prefers-reduced-motion`, todo aparece ya en su lugar (frase llena, cifras contadas, sin desplazamientos).

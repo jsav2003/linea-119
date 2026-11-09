@@ -50,13 +50,9 @@
   --salida: cubic-bezier(0.16, 1, 0.3, 1); /* arranca rápido y frena suave */
   --rapido: 0.14s;
 
-  /* Tablero del operador: tema oscuro de centro de control (no cambia) */
-  --op-fondo: #0b1120;
-  --op-panel: #0f172a;
-  --op-panel-2: #1e293b;
-  --op-borde: #263449;
-  --op-texto: #e2e8f0;
-  --op-suave: #94a3b8;
+  /* Tablero del operador: misma paleta de la marca (gris papel, blanco, negro y rojo) */
+  --op-fondo: var(--papel);
+  --op-texto: var(--negro-2);
 
   font-family: var(--fuente);
   font-size: 100%;
@@ -293,8 +289,8 @@ button { cursor: pointer; }
 .boton.boton--armado { background: #7f1d1d; border-color: #7f1d1d; color: #fff; }
 
 /* Deshabilitado: rayado gris y sin sombra (no depende solo del color).
-   El tablero del operador conserva el suyo (Operador.css). */
-.boton:disabled:not(.boton--op, .boton--op-primario, .boton--op-exito),
+   El :is() sube la especificidad para ganarle a las variantes (.boton--enviar, colores del tablero). */
+:is(.boton, .operador .boton):disabled,
 .boton.boton--deshabilitado,
 .boton.boton--deshabilitado:hover,
 .boton.boton--deshabilitado:active {
@@ -528,18 +524,19 @@ select.campo__control {
 .burbuja--operador { background: #e0e7ff; color: #1e1b4b; border-bottom-left-radius: 4px; }
 .burbuja--ciudadano { margin-left: auto; background: #dcfce7; color: #14532d; border-bottom-right-radius: 4px; }
 
-/* ----- Piezas compartidas, con el estilo brutalista solo en las pantallas del ciudadano ----- */
-.pagina-ciudadano .insignia-estado { border: 2px solid currentColor; border-radius: 0; font-size: 0.72rem; letter-spacing: 0.04em; text-transform: uppercase; }
-.pagina-ciudadano .insignia-grupo { border: 2px solid var(--negro-2); border-radius: 0; }
-.pagina-ciudadano .insignia-grupo__punto { border-radius: 0; }
-.pagina-ciudadano .galeria__miniaturas { gap: 12px; }
-.pagina-ciudadano .galeria__miniatura { border: var(--trazo) solid var(--negro-2); border-radius: 0; box-shadow: var(--sombra-sm); }
-.pagina-ciudadano .galeria__video,
-.pagina-ciudadano .galeria__ampliada { border: var(--trazo) solid var(--negro-2); border-radius: 0; }
-.pagina-ciudadano .burbuja { border: 2px solid var(--negro-2); border-radius: 0; box-shadow: 3px 3px 0 var(--negro-2); }
-.pagina-ciudadano .burbuja--operador { background: #fff; color: var(--tinta); }
-.pagina-ciudadano .burbuja--ciudadano { background: var(--negro-2); color: var(--blanco); box-shadow: 3px 3px 0 var(--gris); }
-.pagina-ciudadano .burbuja small { opacity: 0.85; }
+/* ----- Piezas compartidas con el estilo brutalista (pantallas del ciudadano y tablero) ----- */
+:is(.pagina-ciudadano, .operador) .insignia-estado { border: 2px solid currentColor; border-radius: 0; font-size: 0.72rem; letter-spacing: 0.04em; text-transform: uppercase; }
+:is(.pagina-ciudadano, .operador) .insignia-grupo { border: 2px solid var(--negro-2); border-radius: 0; }
+:is(.pagina-ciudadano, .operador) .insignia-grupo__punto { border-radius: 0; }
+:is(.pagina-ciudadano, .operador) .critico { border: 2px solid var(--negro-2); border-radius: 0; letter-spacing: 0.04em; text-transform: uppercase; }
+:is(.pagina-ciudadano, .operador) .galeria__miniaturas { gap: 12px; }
+:is(.pagina-ciudadano, .operador) .galeria__miniatura { border: var(--trazo) solid var(--negro-2); border-radius: 0; box-shadow: var(--sombra-sm); }
+:is(.pagina-ciudadano, .operador) .galeria__video,
+:is(.pagina-ciudadano, .operador) .galeria__ampliada { border: var(--trazo) solid var(--negro-2); border-radius: 0; }
+:is(.pagina-ciudadano, .operador) .burbuja { border: 2px solid var(--negro-2); border-radius: 0; box-shadow: 3px 3px 0 var(--negro-2); }
+:is(.pagina-ciudadano, .operador) .burbuja--operador { background: #fff; color: var(--tinta); }
+:is(.pagina-ciudadano, .operador) .burbuja--ciudadano { background: var(--negro-2); color: var(--blanco); box-shadow: 3px 3px 0 var(--gris); }
+:is(.pagina-ciudadano, .operador) .burbuja small { opacity: 0.85; }
 
 /* Movimiento reducido: sin desplazamientos ni animaciones, todo aparece ya en su lugar */
 @media (prefers-reduced-motion: reduce) {

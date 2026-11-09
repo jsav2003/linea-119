@@ -26,16 +26,17 @@ export default function MapaOperador({ reportes = [], seleccionadoId = null, onS
     <MapContainer center={CENTRO_CALI} zoom={13} style={{ width: '100%', height: '100%' }}>
       {/* Dos estilos de mapa: el operador los cambia con el control de la esquina */}
       <LayersControl position="topright">
-        <LayersControl.BaseLayer checked name="Calles (OpenStreetMap)">
+        <LayersControl.BaseLayer checked name="Calles en grises (como la marca)">
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            className="mapa-gris"
           />
         </LayersControl.BaseLayer>
-        <LayersControl.BaseLayer name="Oscuro (centro de control)">
+        <LayersControl.BaseLayer name="Calles a color (OpenStreetMap)">
           <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>'
-            url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
         </LayersControl.BaseLayer>
       </LayersControl>
