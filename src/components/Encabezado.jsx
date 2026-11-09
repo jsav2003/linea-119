@@ -4,10 +4,11 @@ import NavPildora from './NavPildora.jsx'
 
 // Encabezado con la identidad de Bomberos Cali / Línea 119, la navegación y el botón de llamar.
 // Se usa en la landing y en las pantallas del ciudadano. `oscuro` lo pinta sobre fondo negro.
-export default function Encabezado({ oscuro = false }) {
+// `ancho` cambia el contenedor para alinearlo con el contenido de la pantalla (p. ej. el formulario).
+export default function Encabezado({ oscuro = false, ancho = 'contenedor--ancho' }) {
   return (
     <header className={`encabezado${oscuro ? ' encabezado--oscuro' : ''}`}>
-      <div className="contenedor contenedor--ancho encabezado__fila">
+      <div className={`contenedor ${ancho} encabezado__fila`}>
         <Link to="/" className="marca" aria-label="Bomberos Cali, línea 119: ir al inicio">
           <Logo />
           <span className="marca__texto">

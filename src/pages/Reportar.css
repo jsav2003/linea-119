@@ -23,7 +23,41 @@
 .en-curso ul { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
 .en-curso a { font-weight: 800; font-variant-numeric: tabular-nums; text-decoration-thickness: 2px; text-underline-offset: 3px; }
 
-.formulario { display: grid; gap: 28px; margin-top: 28px; }
+/* Distribución:
+   · más de 1480 px: guía | preguntas | "Tu reporte"
+   · 1000 a 1480 px: preguntas | "Tu reporte" (la guía se oculta: sus consejos salen también en la confirmación)
+   · menos de 1000 px: una sola columna */
+.reportar__cuerpo { display: grid; grid-template-columns: minmax(0, 1fr); align-items: start; gap: 36px; margin-top: 28px; }
+.guia { display: none; }
+.formulario { display: grid; grid-template-columns: minmax(0, 1fr) 340px; align-items: start; gap: 28px 36px; }
+
+@media (min-width: 1480px) {
+  .reportar__cuerpo { grid-template-columns: 290px minmax(0, 1fr); }
+  .formulario { grid-template-columns: minmax(0, 1fr) 360px; }
+  .guia { position: sticky; top: 90px; display: grid; gap: 22px; }
+}
+
+/* Guía lateral: llamar al 119, consejos según el grupo y qué tener a mano */
+.guia__rotulo { margin: 0 0 10px; color: var(--tinta-2); }
+.guia__llamar { padding: 18px; border: var(--trazo) solid var(--negro-2); background: var(--negro-2); color: var(--blanco); box-shadow: 6px 6px 0 var(--rojo); --foco: var(--blanco); }
+.guia__llamar .guia__rotulo { color: var(--blanco); font-size: 0.82rem; }
+.guia__llamar .boton { border-color: var(--blanco); box-shadow: 4px 4px 0 var(--blanco); }
+.guia__llamar .boton:hover { box-shadow: 5px 5px 0 var(--blanco); }
+.guia__llamar .boton:active { box-shadow: 0 0 0 var(--blanco); }
+.guia__nota { margin: 12px 0 0; color: var(--gris-claro); font-size: 0.82rem; }
+.guia__bloque { padding: 16px 18px; border: var(--trazo) solid var(--negro-2); background: var(--blanco); box-shadow: var(--sombra-sm); }
+/* Consejos: franja del color del grupo elegido; entran con una transición al cambiar de grupo */
+.guia__bloque--consejos { border-left-width: 12px; border-left-color: var(--color); animation: desplegar 0.3s var(--salida); }
+.guia__grupo { margin: -2px 0 10px; font-weight: 750; line-height: 1.25; }
+.guia__codigo { font-family: var(--fuente-titular); font-size: 1.15rem; font-stretch: 112%; font-weight: 800; letter-spacing: -0.04em; }
+.guia__lista { display: grid; gap: 8px; margin: 0; padding-left: 1.1em; font-size: 0.9rem; line-height: 1.4; }
+.guia__lista li::marker { color: var(--rojo-texto); font-weight: 800; }
+.guia__lista--marcas { padding-left: 0; list-style: none; }
+.guia__lista--marcas li { position: relative; padding-left: 20px; }
+/* Cuadro relleno (no vacío: que no parezca una casilla para marcar) */
+.guia__lista--marcas li::before { content: ''; position: absolute; top: 0.45em; left: 2px; width: 8px; height: 8px; background: var(--negro-2); }
+.formulario__bloques { display: grid; gap: 28px; min-width: 0; }
+.campo-corto { max-width: 420px; }
 
 /* Un bloque por pregunta del protocolo */
 .bloque { padding: clamp(18px, 3vw, 28px) clamp(16px, 3vw, 28px) 8px; border: var(--trazo) solid var(--negro-2); background: var(--blanco); box-shadow: var(--sombra); }
@@ -119,7 +153,7 @@
 .ubicacion .campo__ayuda { margin-bottom: 10px; }
 .ubicacion__estado { margin: 10px 0 0; color: var(--tinta-2); font-size: var(--t-pequeno); font-weight: 600; font-variant-numeric: tabular-nums; }
 
-.fila-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 18px; }
+.fila-2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; gap: 0 18px; }
 
 /* Fotos y video */
 .archivos { padding-bottom: 16px; }
@@ -168,21 +202,81 @@
 .archivos__cuenta { margin: 10px 0 0; color: var(--tinta-3); font-size: 0.85rem; font-weight: 600; }
 .recomendaciones { display: grid; gap: 10px; margin: 0 0 20px; padding-left: 1.2em; }
 
-/* Envío */
-.envio { display: grid; gap: 16px; padding: clamp(18px, 3vw, 26px); border: var(--trazo) solid var(--negro-2); background: var(--blanco); box-shadow: var(--sombra); }
+/* Panel "Tu reporte": avance por pasos + enviar. Se queda a la vista al bajar (sticky). */
+.envio {
+  position: sticky;
+  top: 90px; /* debajo del encabezado fijo */
+  display: grid;
+  gap: 16px;
+  max-height: calc(100dvh - 110px);
+  overflow-y: auto;
+  padding: 22px;
+  border: var(--trazo) solid var(--negro-2);
+  background: var(--blanco);
+  box-shadow: var(--sombra);
+}
 .envio__faltan {
-  padding: 12px 14px;
+  margin: 0;
+  padding: 10px 12px;
   border: 2px solid var(--negro-2);
   border-left: 8px solid var(--rojo);
   background: #fff;
   color: var(--tinta);
-  font-size: 0.95rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.4;
 }
-.envio__faltan p { margin: 0 0 6px; font-weight: 700; }
-.envio__faltan ul { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 0; padding: 0; list-style: none; }
-.envio__faltan .enlace { min-height: 32px; color: var(--tinta); }
-.envio__faltan .enlace:hover { color: var(--rojo-texto); }
-.envio__nota { margin: 0; color: var(--tinta-3); font-size: 0.8rem; text-align: center; }
+.envio__nota { margin: 0; color: var(--tinta-3); font-size: 0.78rem; text-align: center; }
+
+/* Avance: conteo, barra por tramos y un renglón por paso */
+.resumen__cabeza { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 12px; }
+.resumen__titulo { margin: 0; }
+.resumen__conteo { margin: 0; color: var(--tinta-2); font-size: 0.85rem; font-weight: 600; }
+.resumen__conteo strong {
+  color: var(--tinta);
+  font-family: var(--fuente-titular);
+  font-size: 1.5rem;
+  font-stretch: 112%;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.resumen__barra { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; margin: 10px 0 12px; }
+.resumen__barra span { height: 10px; border: 2px solid var(--negro-2); background: #fff; transition: background-color 0.3s var(--salida); }
+.resumen__barra .resumen__tramo--lleno { background: var(--rojo); }
+.resumen__lista { display: grid; gap: 2px; margin: 0; padding: 0; list-style: none; }
+.resumen__paso {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  width: 100%;
+  padding: 7px 8px;
+  border: 2px solid transparent;
+  background: none;
+  color: var(--tinta);
+  text-align: left;
+  transition: background-color var(--rapido), border-color var(--rapido);
+}
+.resumen__paso:hover { border-color: var(--negro-2); background: #fff; }
+.resumen__numero {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 2px solid var(--negro-2);
+  background: #fff;
+  font-size: 0.85rem;
+  font-weight: 800;
+  transition: background-color 0.3s, color 0.3s;
+}
+.resumen__paso--listo .resumen__numero { background: var(--negro-2); color: var(--blanco); }
+.resumen__paso--opcional .resumen__numero { border-style: dashed; }
+.resumen__texto { display: grid; gap: 1px; min-width: 0; padding-top: 2px; }
+.resumen__texto strong { font-size: 0.92rem; font-weight: 750; line-height: 1.2; }
+.resumen__texto small { color: var(--tinta-3); font-size: 0.78rem; line-height: 1.3; }
+.resumen__paso--listo small { color: #166534; font-weight: 700; }
 
 /* Botón de enviar: muy marcado. Al presionarlo se "hunde": baja hasta donde estaba su sombra */
 .boton.boton--enviar {
@@ -208,7 +302,15 @@
   to { opacity: 1; }
 }
 
+/* Tableta y celular: una sola columna; el panel queda al final, antes de enviar */
+@media (max-width: 1000px) {
+  .reportar__cuerpo { margin-top: 20px; }
+  .formulario { grid-template-columns: minmax(0, 1fr); }
+  .envio { position: static; max-height: none; overflow: visible; }
+}
+
 @media (max-width: 600px) {
+  .envio { padding: 18px; }
   .bloque__titulo { gap: 10px; }
   .bloque__numero { width: 36px; height: 36px; font-size: 1rem; }
   .fila-2 { grid-template-columns: 1fr; }
